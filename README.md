@@ -1,8 +1,9 @@
-安装dependencies
+install dependencies
 
 ### `npm install`
 
-运行以下代码来启动这个本地的app：
+start the local app
 
 ### `npm start`
 
+You still need a backend server and a mongo DB to run this server.
