@@ -1,26 +1,56 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import Dialog from "../Dialog/Dialog";
 import RatingCard from "./RatingCard";
 
+
+
 function RatingPanel(props) {
-  const [index, nextRestaurant] = useState(0);
-  const [showRestaurantCard, toggleShow] = useState(true);
+  const [index, setIndex] = useState(0);
+  const [showRestaurantCard, toggleShow] = useState(false);
+  const [scores, setScore] = useState([]);
+
+  const nextRestaurant= (restaurants)=>{
+    return (index)=>{
+      if(index === restaurants.length){
+        toggleShow(false);
+      }
+      setIndex(index);
+    }
+  }
+
+
+  const addScore = (score)=>{
+    let newScores = scores.slice();
+    newScores.push(score);
+    setScore(newScores);
+  }
+
+  if(index === props.restaurants.length){
+    console.log(scores)
+    return (<div>
+
+    </div>)
+  }
+
   const restaurantCard = (
     <RatingCard
       classList="DialogContent Diaglog-card"
       img={props.restaurants[index].img}
       name={props.restaurants[index].name}
       categories={props.restaurants[index].categories}
-      nextRestaurant = {nextRestaurant}
+      nextRestaurant = {nextRestaurant(props.restaurants)}
+      addScore={addScore}
       index = {index}
     />
   );
+
+  let showBanner = (props.login)?`You have to finish your initial review, ${props.restaurants.length - index} businesses remained`:"You should log in before you check your recommendation";
 
   return (
     <div className="mask">
       <div className="mask-layer"></div>
       <div className="mask-banner">
-        <h1 style={{ flex: "0 0 100%" }}>{props.showBanner}</h1>
+        <h1 style={{ flex: "0 0 100%" }}>{showBanner}</h1>
         <button
           onClick={() => {
             toggleShow(true);

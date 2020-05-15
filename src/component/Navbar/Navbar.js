@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import {connect} from 'react-redux'
 import {initUser, getPosition} from '../../action/user'
-import {initTodos} from '../../action/todo'
-import {initReviewArray} from '../../action/review'
 import {setError, removeError} from '../../action/error'
 import './Navbar.css'
 import Dialog from '../Dialog/Dialog'
 import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
-import restaurants from '../../defaultData'
 
 function Navbar(props){
     const [login, toggleLoginDialog] = useState(false);
@@ -69,19 +66,7 @@ function mapDispatchToProps(dispatch){
                 if(data.error)
                     throw new Error(data.error.message);
                 dispatch(initUser(data));
-                dispatch(removeError())
-                return data;
-            })
-            .then((data)=>{
-                let url = 'http://localhost:3001/api/todos/user/'+ data.id
-                fetch(url,{
-                    method: "GET",
-                    credentials:"include"
-                })
-                .then(response=>response.json())
-                .then(data=>{
-                    dispatch(initTodos(data))
-                })
+                dispatch(removeError());
             })
             .catch((error)=>{
                 dispatch(setError(String(error)));
@@ -99,11 +84,9 @@ function mapDispatchToProps(dispatch){
                     throw new Error(data.error.message);
                 dispatch(initUser(data));
                 dispatch(removeError());
-                dispatch(initReviewArray(restaurants));
                 navigator.geolocation.getCurrentPosition((position)=>{
                     dispatch(getPosition({latitude: position.coords.latitude, longtitude: position.coords.longitude}));
                 });
-                return data
             })
             .catch((error)=>{
                 //do nothing
@@ -125,19 +108,6 @@ function mapDispatchToProps(dispatch){
                     throw new Error(data.error.message);
                 dispatch(initUser(data));
                 dispatch(removeError())
-            })
-            .then((data)=>{
-                let url = 'http://localhost:3001/api/todos/user/'+ data.id
-                
-                fetch(url,{
-                    method: "GET",
-                    credentials:"include"
-                })
-                .then(response=>response.json())
-                .then(data=>{
-                    console.log(data)
-                    dispatch(initTodos(data))
-                })
             })
             .catch((error)=>{
                 dispatch(setError(String(error)));

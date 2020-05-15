@@ -5,7 +5,7 @@ function user(state={}, action){
         case INIT_USER:
             return {
                 userID: action.userID,
-                userName: action.userName
+                userName: action.userName,
             }
         case GET_POSITION:
             return {
