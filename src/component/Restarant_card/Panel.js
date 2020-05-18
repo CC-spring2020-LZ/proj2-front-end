@@ -5,10 +5,6 @@ import Card from "./Card";
 import "./Panel.css";
 import RatingPanel from "./RatingPanel";
 
-function getRecommendation(user) {
-  return restaurants;
-}
-
 function getReview() {
   return restaurants;
 }
@@ -18,23 +14,49 @@ function Panel(props) {
   const [showRecommendation, setShowRecommendation] = useState(false);
   const [recommendation, setRecommendation] = useState([]);
 
-  useEffect((userID) => {
-    setRecommendation(getRecommendation(userID));
-  }, props.userID);
+  const getRecommendation = (user, setRecommendation) => {
+    let restaurantsPromiseArr = restaurants.map((restaurant) => {
+      return fetch(
+        "http://ec2-3-83-164-100.compute-1.amazonaws.com:8088/yelp-fusion/requestRecommendByID.do",
+        {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `restaurantID=${restaurant.business_id}`,
+        }
+      ).then((response) => response.json());
+    });
+    Promise.all(restaurantsPromiseArr).then((rawRestaurantsArr) => {
+      let restaurantsJSON = rawRestaurantsArr.map((rawRestaurant) => {
+        let data = rawRestaurant.data
+        return JSON.parse(data);
+      });
+      setRecommendation(restaurantsJSON);
+    });
+  };
 
-  const restaurantList = recommendation.map((restaurant) => (
+  useEffect((userID) => {
+    getRecommendation(userID, setRecommendation);
+  }, []);
+
+  const restaurantList = recommendation.map((restaurant, index) => (
     <Card
-      img={restaurant.img}
+      key = {restaurants[index].business_id}
+      img={restaurant.image_url}
       name={restaurant.name}
       categories={restaurant.categories}
+      url={restaurant.url}
     />
   ));
 
   return (
     <div>
-      <RatingPanel style={(showRecommendation)?{display:'none'}:{}}
+      <RatingPanel
+        style={showRecommendation ? { display: "none" } : {}}
         login={props.userID == null}
-        restaurants={restaurants}
+        restaurants={recommendation}
         closeRatingPanel={setShowRecommendation}
       ></RatingPanel>
       <div className="App">{restaurantList}</div>

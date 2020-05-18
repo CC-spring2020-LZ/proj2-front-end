@@ -2,9 +2,9 @@
     position: fixed;
     top:50%;
     left:50%;
-    max-height: 1000px;
+    max-height: 800px;
     width: 400px;
-    transform: translate(-200px, -250px);
+    transform: translate(-150px, -250px);
     z-index: 200;
 }
 

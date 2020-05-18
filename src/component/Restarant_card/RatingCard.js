@@ -3,7 +3,7 @@ import './Card.css'
 
 function RatingCard(props){
     return (
-        <div className={props.classList + "card myCard"} style={{width: "20rem"}}>
+        <div className={props.classList + "card myCard"}>
             <img src={props.img} style={{maxHeight:"400px"}} className="card-img-top" alt="..."/>
             <div className="card-body">
                 <h5 className="card-title">{props.name}</h5>

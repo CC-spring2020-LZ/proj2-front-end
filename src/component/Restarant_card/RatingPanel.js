@@ -1,50 +1,48 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import Dialog from "../Dialog/Dialog";
 import RatingCard from "./RatingCard";
-
-
 
 function RatingPanel(props) {
   const [index, setIndex] = useState(0);
   const [showRestaurantCard, toggleShow] = useState(false);
   const [scores, setScore] = useState([]);
 
-  const nextRestaurant= (restaurants)=>{
-    return (index)=>{
-      if(index === restaurants.length){
+  const nextRestaurant = (restaurants) => {
+    return (index) => {
+      if (index === restaurants.length) {
         toggleShow(false);
       }
       setIndex(index);
-    }
-  }
+    };
+  };
 
-
-  const addScore = (score)=>{
+  const addScore = (score) => {
     let newScores = scores.slice();
     newScores.push(score);
     setScore(newScores);
-  }
+  };
 
-  if(index === props.restaurants.length){
-    console.log(scores)
-    return (<div>
-
-    </div>)
+  if (index === props.restaurants.length) {
+    return <div></div>;
   }
 
   const restaurantCard = (
     <RatingCard
       classList="DialogContent Diaglog-card"
-      img={props.restaurants[index].img}
+      img={props.restaurants[index].image_url}
       name={props.restaurants[index].name}
       categories={props.restaurants[index].categories}
-      nextRestaurant = {nextRestaurant(props.restaurants)}
+      nextRestaurant={nextRestaurant(props.restaurants)}
       addScore={addScore}
-      index = {index}
+      index={index}
     />
   );
 
-  let showBanner = (props.login)?`You have to finish your initial review, ${props.restaurants.length - index} businesses remained`:"You should log in before you check your recommendation";
+  let showBanner = props.login
+    ? `You have to finish your initial review, ${
+        props.restaurants.length - index
+      } businesses remained`
+    : "You should log in before you check your recommendation";
 
   return (
     <div className="mask">
