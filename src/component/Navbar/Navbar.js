@@ -9,6 +9,8 @@ import SignupForm from "./SignupForm";
 import AskForHelp from "../P2pPanel/AskForHelp";
 import ProvideHelp from "../P2pPanel/ProvideHelp";
 
+const server_url = 'http://wywe.azurewebsites.net'
+
 function Navbar(props) {
   const [login, toggleLoginDialog] = useState(false);
   const [signup, toggleSignUpDialog] = useState(false);
@@ -97,9 +99,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     login: (user) => {
-      fetch("http://localhost:3001/api/auth/login", {
+      fetch(server_url+"/api/auth/login", {
         method: "POST",
-        mode: "cors",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
@@ -117,9 +118,8 @@ function mapDispatchToProps(dispatch) {
         });
     },
     init: () => {
-      fetch("http://localhost:3001/api/auth", {
+      fetch(server_url+"/api/auth", {
         method: "GET",
-        mode: "cors",
         credentials: "include",
       })
         .then((response) => response.json())
@@ -141,9 +141,8 @@ function mapDispatchToProps(dispatch) {
         });
     },
     signup: (user) => {
-      fetch("http://localhost:3001/api/auth/signup", {
+      fetch(server_url+"/api/auth/signup", {
         method: "POST",
-        mode: "cors",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",

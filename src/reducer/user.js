@@ -6,6 +6,10 @@ function user(state={}, action){
             return {
                 userID: action.userID,
                 userName: action.userName,
+                position:{
+                    latitude:'40',
+                    longitude:'-77',
+                }
             }
         case GET_POSITION:
             return {

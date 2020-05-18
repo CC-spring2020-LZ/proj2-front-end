@@ -14,7 +14,26 @@ function Panel(props) {
   const [showRecommendation, setShowRecommendation] = useState(false);
   const [recommendation, setRecommendation] = useState([]);
 
-  const getRecommendation = (user, setRecommendation) => {
+  const getRecommendation = (setRecommendation) => {
+    let url = `ec2-18-208-177-247.compute-1.amazonaws.com:5000?user_id=${props.user.userID}&latitude=${props.user.latitude}&longtitude=${props.user.longtitude}`;
+    fetch(url, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        let restaurant = [];
+        if(res["10"] === 1){
+          setShowRecommendation(res["10"]===1);
+          for(let i = 0; i < 10; i++){
+            restaurant.push(res[i]);
+          }
+        }else{
+          for(let i = 0; i < 10; i++){
+            restaurant.push(res[i].business_id)
+          }
+        }
+        setRecommendation(restaurant);
+      });
     let restaurantsPromiseArr = restaurants.map((restaurant) => {
       return fetch(
         "http://ec2-3-83-164-100.compute-1.amazonaws.com:8088/yelp-fusion/requestRecommendByID.do",
@@ -30,20 +49,20 @@ function Panel(props) {
     });
     Promise.all(restaurantsPromiseArr).then((rawRestaurantsArr) => {
       let restaurantsJSON = rawRestaurantsArr.map((rawRestaurant) => {
-        let data = rawRestaurant.data
+        let data = rawRestaurant.data;
         return JSON.parse(data);
       });
       setRecommendation(restaurantsJSON);
     });
   };
 
-  useEffect((userID) => {
-    getRecommendation(userID, setRecommendation);
-  }, []);
+  useEffect(() => {
+    getRecommendation(setRecommendation);
+  });
 
   const restaurantList = recommendation.map((restaurant, index) => (
     <Card
-      key = {restaurants[index].business_id}
+      key={restaurants[index].business_id}
       img={restaurant.image_url}
       name={restaurant.name}
       categories={restaurant.categories}
@@ -55,7 +74,7 @@ function Panel(props) {
     <div>
       <RatingPanel
         style={showRecommendation ? { display: "none" } : {}}
-        login={props.userID == null}
+        login={props.user.userID === null}
         restaurants={recommendation}
         closeRatingPanel={setShowRecommendation}
       ></RatingPanel>
