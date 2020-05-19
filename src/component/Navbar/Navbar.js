@@ -99,7 +99,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     login: (user) => {
-      fetch(server_url+"/api/auth/login", {
+      fetch(server_url + "/api/auth/login", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -118,7 +118,7 @@ function mapDispatchToProps(dispatch) {
         });
     },
     init: () => {
-      fetch(server_url+"/api/auth", {
+      fetch(server_url + "/api/auth", {
         method: "GET",
         credentials: "include",
       })
@@ -127,21 +127,19 @@ function mapDispatchToProps(dispatch) {
           if (data.error) throw new Error(data.error.message);
           dispatch(initUser(data));
           dispatch(removeError());
-          navigator.geolocation.getCurrentPosition((position) => {
-            dispatch(
-              getPosition({
-                latitude: position.coords.latitude,
-                longtitude: position.coords.longitude,
-              })
-            );
-          });
+          dispatch(
+            getPosition({
+              latitude: 40,
+              longitude: -77,
+            })
+          );
         })
         .catch((error) => {
           //do nothing
         });
     },
     signup: (user) => {
-      fetch(server_url+"/api/auth/signup", {
+      fetch(server_url + "/api/auth/signup", {
         method: "POST",
         credentials: "include",
         headers: {

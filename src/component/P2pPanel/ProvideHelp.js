@@ -35,23 +35,24 @@ function ProvideHelp(props) {
       setState('Please recommand a restaurant');
       conn.on('open',()=>{
         conn.on('data',(data)=>{
-          console.log(data)
+          console.log(data) 
           fetch("http://ec2-3-83-164-100.compute-1.amazonaws.com:8088/yelp-fusion/requestRecommend.do",{
             method: 'POST',
             mode:'cors',
             headers: {
               "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: `latitude=${data.latitude}&longitude=${data.longtitude}&price=1&term=Chinese`,
+            body: `latitude=${data.latitude}&longitude=${data.longitude}&price=1&term=Chinese`,
           }).then(response=>response.json())
           .then((res)=>{
+            console.log(res)
             setRes(JSON.parse(res.data))
           })
         })
       })
       setConn(conn);
     })
-  });
+  },[]);
 
 
   let restaurantsList = restaurants.map((restaurant)=>{

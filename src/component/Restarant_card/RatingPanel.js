@@ -10,6 +10,7 @@ function RatingPanel(props) {
   const nextRestaurant = (restaurants) => {
     return (index) => {
       if (index === restaurants.length) {
+        props.closeRatingPanel(false, scores)
         toggleShow(false);
       }
       setIndex(index);
@@ -45,7 +46,7 @@ function RatingPanel(props) {
     : "You should log in before you check your recommendation";
 
   return (
-    <div className="mask">
+    <div className="mask" style={props.style}>
       <div className="mask-layer"></div>
       <div className="mask-banner">
         <h1 style={{ flex: "0 0 100%" }}>{showBanner}</h1>
